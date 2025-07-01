@@ -104,7 +104,7 @@
     
     "desc": "Your number , dont put '+' and put you area code(exemple of kenya '254')",
     "required":true,
-    "value": "255693629079"
+    "value": ""
   },
     "WARN_COUNT":
   {
@@ -125,7 +125,7 @@
   },
   "ANTI_DELETE_MESSAGE" : {
     "description": "if you want to enable anti delete message put yes else put no",
-    "value": "yes",
+    "value": "no",
         "required": true
   }
   },
