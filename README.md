@@ -9,10 +9,15 @@
 # RAHMANI-XMD BOT 🚀✅ 
 
 </p>
-<p align="center"> 
-  <a href="https://whatsapp.com/channel/0029VatokI45EjxufALmY32X">
-    <img alt=Support height="390" src="https://files.catbox.moe/aktbgo.jpg"> 
-    </p>
+
+<p align="center">  
+  <a href="https://files.catbox.moe/aktbgo.jpg">
+    <img alt="secktor docs" height="300" src="https://files.catbox.moe/aktbgo.jpg">
+    <h1 align="center"> 
+    </h1>
+  </a>
+</p>  
+
 
 
 **How to deploy**
