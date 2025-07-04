@@ -10,13 +10,8 @@
 
 </p>
 
-<p align="center">  
-  <a href="https://files.catbox.moe/aktbgo.jpg">
-    <img alt="secktor docs" height="300" src="https://files.catbox.moe/aktbgo.jpg">
-    <h1 align="center"> 
-    </h1>
-  </a>
-</p>  
+<p align="center"><img src="https://files.catbox.moe/aktbgo.jpg" width="500"height="500" />
+
 
 
 
