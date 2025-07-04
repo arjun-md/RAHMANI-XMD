@@ -9,12 +9,10 @@
 # RAHMANI-XMD BOT 🚀✅ 
 
 </p>
-
-<p align="center">
-  <a href="https://files.catbox.moe/3u88n0.webp">
-    <img src="https://files.catbox.moe/oqoib3.jpg" width="100%" height="auto">
-  </a>
-</p>
+<p align="center"> 
+  <a href="https://whatsapp.com/channel/0029VatokI45EjxufALmY32X">
+    <img alt=Support height="390" src="https://files.catbox.moe/aktbgo.jpg"> 
+    </p>
 
 
 
