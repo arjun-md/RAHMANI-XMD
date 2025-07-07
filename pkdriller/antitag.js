@@ -1,82 +1,61 @@
 const { zokou } = require("../framework/zokou");
 
-// Store anti-tag state per group (better for multi-group support)
-const antiTagStatus = new Map();
+let antiTagActive = false; // State of the anti-tag feature
 
 zokou({
   nomCom: "antitag",
-  categorie: "Group",
-  reaction: "⚠️",
-  fromMe: true, // Only works when used by admin/owner
-  desc: "Protect owner from being tagged in groups"
-}, async (dest, zk, commandeOptions) => {
-  const { repondre, arg, ms, auteurMessage } = commandeOptions;
-  const groupId = dest;
+  categorie: "General",
+  reaction: "🥶"
+}, async (origineMessage, zk, commandeOptions) => {
+  const { ms, arg } = commandeOptions;
 
   try {
-    // Command toggle functionality
+    // Handle command arguments for toggling anti-tag
     if (arg.length > 0) {
       const action = arg[0].toLowerCase();
-      
       if (action === "on") {
-        antiTagStatus.set(groupId, true);
-        return repondre("🛡️ *Anti-tag protection activated*");
-      } 
-      else if (action === "off") {
-        antiTagStatus.set(groupId, false);
-        return repondre("❌ *Anti-tag protection deactivated*");
-      }
-      else if (action === "status") {
-        const status = antiTagStatus.get(groupId) ? "ACTIVE ✅" : "INACTIVE ❌";
-        return repondre(`🛡️ Anti-tag Status: ${status}`);
+        antiTagActive = true;
+        await zk.sendMessage(origineMessage.key.remoteJid, {
+          text: "✅ Anti-tag is now *active*!",
+        });
+        return;
+      } else if (action === "off") {
+        antiTagActive = false;
+        await zk.sendMessage(origineMessage.key.remoteJid, {
+          text: "❌ Anti-tag is now *deactivated*!",
+        });
+        return;
       }
     }
 
-    // Show help if no arguments
-    return repondre(
-      `🛡️ *Anti-tag Commands:*\n` +
-      `• *${s.PREFIXE}antitag on* - Enable protection\n` +
-      `• *${s.PREFIXE}antitag off* - Disable protection\n` +
-      `• *${s.PREFIXE}antitag status* - Check current status`
-    );
+    // Check if anti-tag is active
+    if (!antiTagActive) return;
 
-  } catch (error) {
-    console.error("Anti-tag Command Error:", error);
-    repondre("❌ An error occurred while processing the command");
-  }
-});
+    // Detect mentions in incoming messages
+    if (
+      ms.message &&
+      ms.message.extendedTextMessage &&
+      ms.message.extendedTextMessage.contextInfo &&
+      ms.message.extendedTextMessage.contextInfo.mentionedJid
+    ) {
+      const mentionedJids = ms.message.extendedTextMessage.contextInfo.mentionedJid;
+      const ownerJid = "1234567890@s.whatsapp.net"; // Replace 1234567890 with the actual owner's number
 
-// Message handler for detecting tags
-module.exports.antiTagHandler = async (message, zk) => {
-  try {
-    const groupId = message.key.remoteJid;
-    if (!groupId || !antiTagStatus.get(groupId)) return;
-
-    // Check for mentions
-    if (message?.message?.extendedTextMessage?.contextInfo?.mentionedJid) {
-      const mentionedJids = message.message.extendedTextMessage.contextInfo.mentionedJid;
-      const ownerJid = s.OWNER_NUMBER + "@s.whatsapp.net"; // Use from config
+      console.log("Mentioned JIDs:", mentionedJids); // Debug log to check mentioned JIDs
 
       if (mentionedJids.includes(ownerJid)) {
-        await zk.sendMessage(groupId, { 
-          text: `*DON'T TAG MY OWNER!*\n@${message.key.participant.split('@')[0]}`,
-          mentions: [message.key.participant]
+        console.log("Owner mentioned:", ownerJid); // Debug log if owner is detected
+        // Send a warning message to the group or chat
+        await zk.sendMessage(origineMessage.key.remoteJid, {
+          text: "⚠️ *DON'T TAG MY OWNER!*",
+          mentions: [origineMessage.key.participant],
         });
-
-        // Optional: Add warning level system
-        const warnings = warningDB.get(message.key.participant) || 0;
-        warningDB.set(message.key.participant, warnings + 1);
-        
-        if (warnings >= 3) {
-          await zk.groupParticipantsUpdate(
-            groupId,
-            [message.key.participant],
-            "remove"
-          );
-        }
       }
     }
   } catch (error) {
-    console.error("Anti-tag Handler Error:", error);
+    console.error("Error in anti-tag script:", error);
+    await zk.sendMessage(origineMessage.key.remoteJid, {
+      text: "❌ An error occurred while processing the anti-tag command.",
+    });
   }
-};
+});
